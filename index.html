@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+    <title>FICHETEC 5 · Control facial</title>
+    <!-- face-api.js -->
+    <script src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
+    <!-- Estilos -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app">
+    <h1>⚡ FICHETEC 5</h1>
+    <div class="panel">
+        <div class="botones-principales">
+            <button class="btn" id="btnFichar">📷 Fichar</button>
+            <button class="btn btn-primario" id="btnRegistrar">👤 Registrar empleado</button>
+            <button class="btn" id="btnVerFichas">📋 Ver fichadas</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL REGISTRO -->
+<div id="modalRegistro" class="modal-overlay">
+    <div class="modal-contenido">
+        <h2>Registrar empleado</h2>
+        <div class="campo">
+            <label>Nombre</label>
+            <input type="text" id="regNombre" placeholder="Ej: María">
+        </div>
+        <div class="campo">
+            <label>Apellido</label>
+            <input type="text" id="regApellido" placeholder="Ej: González">
+        </div>
+        <div class="campo">
+            <label>DNI (máx. 8 dígitos)</label>
+            <input type="text" id="regDni" placeholder="12345678" maxlength="8">
+        </div>
+        <div class="campo">
+            <label>Captura de rostro (2 veces, sin mascarilla ni gafas oscuras)</label>
+            <div class="video-container">
+                <video id="regVideo" autoplay muted></video>
+            </div>
+            <div class="estado-camara" id="regEstado">Preparando cámara...</div>
+            <div style="display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap;">
+                <button class="btn-pequeno" id="regCapturar1">📸 Capturar 1ª</button>
+                <button class="btn-pequeno" id="regCapturar2" disabled>📸 Capturar 2ª</button>
+            </div>
+            <div style="margin-top: 1rem;" id="regPreviews"></div>
+        </div>
+        <div class="fila-botones">
+            <button class="btn-pequeno" id="regCancelar">Cancelar</button>
+            <button class="btn-pequeno primario" id="regGuardar" disabled>Guardar empleado</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL FICHAJE -->
+<div id="modalFichar" class="modal-overlay">
+    <div class="modal-contenido">
+        <h2>Fichar con rostro</h2>
+        <div class="video-container">
+            <video id="ficharVideo" autoplay muted></video>
+        </div>
+        <div class="estado-camara" id="ficharEstado">Esperando rostro...</div>
+        <div id="ficharResultado"></div>
+        <div class="fila-botones">
+            <button class="btn-pequeno" id="ficharCerrar">Cerrar</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL VER FICHAS (admin) -->
+<div id="modalVer" class="modal-overlay">
+    <div class="modal-contenido" style="max-width: 1000px;">
+        <h2>📅 Administración</h2>
+        <div id="verSinAdmin">
+            <p style="margin-bottom: 1rem;">Introduce contraseña de administrador:</p>
+            <input type="password" id="adminPass" placeholder="Contraseña" style="width:100%; padding:1rem; border-radius:60px; border:none; background:white; margin-bottom:1rem;">
+            <button class="btn-pequeno primario" id="btnAccederAdmin">Acceder</button>
+            <div id="adminError" class="texto-error oculto" style="margin-top:1rem;"></div>
+        </div>
+        <div id="verAdminPanel" class="oculto">
+            <div style="display: flex; gap:1rem; align-items:center; margin-bottom:1.5rem; flex-wrap: wrap;">
+                <span class="badge">Admin</span>
+                <button class="btn-pequeno" id="btnCerrarAdmin">Salir</button>
+                <button class="btn-pequeno" id="btnVolverLista" style="display: none;">← Volver a lista</button>
+            </div>
+
+            <!-- Vista lista empleados -->
+            <div id="vistaListaEmpleados">
+                <h3>Empleados</h3>
+                <div class="buscador">
+                    <input type="text" id="buscadorEmpleados" placeholder="Buscar por nombre, apellido o DNI...">
+                </div>
+                <div id="listaEmpleadosContainer" class="lista-empleados"></div>
+            </div>
+
+            <!-- Vista detalle empleado -->
+            <div id="vistaDetalleEmpleado" class="oculto">
+                <h3 id="detalleTitulo"></h3>
+                <div id="resumenEmpleadoDetalle" style="margin-bottom: 1rem;"></div>
+
+                <!-- SECCIÓN DE EXTRAS CON ESTILO CALENDARIO -->
+                <div id="extrasDetalle" class="extras-calendario"></div>
+
+                <h4>Historial de fichadas</h4>
+                <div id="fichadasEmpleadoDetalle"></div>
+
+                <div id="horasTotalesDetalle" style="background:white; border-radius:32px; padding:1.5rem; margin-top:1.5rem;"></div>
+            </div>
+        </div>
+        <div class="fila-botones">
+            <button class="btn-pequeno" id="verCerrar">Cerrar</button>
+        </div>
+    </div>
+</div>
+
+<!-- Script principal -->
+<script src="script.js"></script>
+</body>
+</html>
